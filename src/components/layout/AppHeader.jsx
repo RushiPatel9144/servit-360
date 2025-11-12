@@ -29,7 +29,7 @@ export default function AppHeader() {
 			<div className="max-w-[1200px] mx-auto px-4 py-3 flex items-center justify-between">
 				<div className="text-slate-100 font-semibold">ServIt 360</div>
 				<div className="flex items-center gap-2">
-					<select
+					{/* <select
 						value={role}
 						onChange={onRoleChange}
 						className="px-3 py-1 rounded-lg bg-slate-950 border border-slate-700 text-[12px] text-slate-200"
@@ -43,7 +43,7 @@ export default function AppHeader() {
 								{r}
 							</option>
 						))}
-					</select>
+					</select> */}
 					<button
 						onClick={onLogout}
 						className="px-3 py-1 rounded-full border border-slate-700 text-[12px] text-slate-300 hover:border-emerald-400 hover:text-emerald-300"

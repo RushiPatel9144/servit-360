@@ -5,6 +5,7 @@ import LoginPage from "./pages/auth/LoginPage";
 import CorpDashboard from "./pages/corp/CorpDashboard";
 import CulinaryDashboard from "./pages/culinary/CulinaryDashboard";
 import ServerDashboard from "./pages/server/ServerDashboard";
+import SeedDemo from "./pages/dev/SeedDemo";
 
 function UnifiedDashboard() {
 	const role = localStorage.getItem("role");
@@ -33,6 +34,10 @@ export default function App() {
 				<Route
 					path="/dashboard"
 					element={<UnifiedDashboard />}
+				/>
+				<Route
+					path="/dev-seed"
+					element={<SeedDemo />}
 				/>
 				<Route
 					path="*"

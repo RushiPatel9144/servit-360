@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import RecipesManager from "./RecipesManager";
 import AppHeader from "../../components/layout/AppHeader";
+import MenuManager from "./MenuManager";
 import { db } from "../../firebase";
 import {
 	collection,
@@ -79,6 +80,7 @@ export default function CorpDashboard() {
 				<h1 className="text-xl font-semibold">Corporate Dashboard</h1>
 				<IngredientsManager toast={{ show }} />
 				<RecipesManager />
+				<MenuManager />
 			</div>
 			<Toast />
 		</div>
