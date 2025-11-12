@@ -15,6 +15,44 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+@media print {
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  .bg-slate-950,
+  .bg-slate-900 {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  .border-slate-800 {
+    border-color: #ddd !important;
+  }
+
+  /* Make modal content fill page neatly */
+  .print\:p-0 {
+    padding: 0 !important;
+  }
+
+  .print\:w-80 {
+    width: 20rem !important;
+  }
+
+  .print\:page-break-inside-avoid {
+    page-break-inside: avoid;
+  }
+
+  .print\:gap-0 {
+    gap: 0 !important;
+  }
+}
+
+
+
+
+
 /* a {
   font-weight: 500;
   color: #646cff;
