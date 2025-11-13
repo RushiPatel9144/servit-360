@@ -17,7 +17,7 @@ import AlphaBuckets, { sliceByBucket } from "./components/AlphaBuckets";
 import SpecPanel from "./components/SpecPanel";
 import LabelModal from "./components/Labelmodel";
 import { computeCostAndAllergens } from "../../lib/costing";
-import AllergenMatrixModal from "./components/AllergenMatrixModal";
+import AllergenMatrixModal from "./components/AllergenmatrixModal";
 
 const TYPES = ["Prep", "Purchased", "Expo", "Line Station"];
 const STATIONS = ["Pantry", "Hot Pantry", "Fryer", "Grill", "Saute", "Mozza"];
