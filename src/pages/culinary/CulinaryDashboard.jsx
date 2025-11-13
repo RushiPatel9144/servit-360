@@ -14,8 +14,8 @@ import {
 	where,
 } from "firebase/firestore";
 import AlphaBuckets, { sliceByBucket } from "./components/AlphaBuckets";
-import SpecPanel from "./components/specPanel";
-import LabelModal from "./components/labelmodel";
+import SpecPanel from "./components/SpecPanel";
+import LabelModal from "./components/Labelmodel";
 import { computeCostAndAllergens } from "../../lib/costing";
 import AllergenMatrixModal from "./components/AllergenMatrixModal";
 
