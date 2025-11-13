@@ -6,6 +6,9 @@ import CorpDashboard from "./pages/corp/CorpDashboard";
 import CulinaryDashboard from "./pages/culinary/CulinaryDashboard";
 import ServerDashboard from "./pages/server/ServerDashboard";
 import SeedDemo from "./pages/dev/SeedDemo";
+import SeedDemoV2 from "./pages/dev/SeedDemoV2";
+import SeedServers from "./pages/dev/SeedServers";
+import SeedMenuV2 from "./pages/dev/SeedMenuV2";
 
 function UnifiedDashboard() {
 	const role = localStorage.getItem("role");
@@ -39,6 +42,20 @@ export default function App() {
 					path="/dev-seed"
 					element={<SeedDemo />}
 				/>
+				<Route
+					path="/dev-seed-servers"
+					element={<SeedServers />}
+				/>
+
+				<Route
+					path="/dev-seed2"
+					element={<SeedDemoV2 />}
+				/>
+				<Route
+					path="/dev-menu-seed"
+					element={<SeedMenuV2 />}
+				/>
+
 				<Route
 					path="*"
 					element={

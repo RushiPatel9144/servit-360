@@ -404,6 +404,45 @@ export default function CulinaryDashboard() {
 		return c >= from && c <= to;
 	}
 
+	// Open a spec when you only know the recipeId (for components / reverse links)
+	const openSpecByRecipeId = async (recipeId) => {
+		if (!recipeId) return;
+
+		// try to find an existing menuItem that uses this recipe
+		const mi =
+			allItems.find((m) => m.recipeId === recipeId) ||
+			items.find((m) => m.recipeId === recipeId);
+
+		// fetch recipe
+		const rSnap = await getDoc(doc(db, "recipes", recipeId));
+		const r = rSnap.exists() ? rSnap.data() : null;
+		setRecipe(r);
+
+		const map = await ensureIngMap();
+		const cmp = await computeCostAndAllergens(db, r, map);
+		setComputed(cmp);
+
+		// pick a label for the left header
+		setSelected(
+			mi || {
+				id: recipeId,
+				name: r?.name || "Spec",
+				type: "Prep",
+				station: "Pantry",
+				brand: "",
+			}
+		);
+		setSpecOpen(true);
+	};
+
+	const menuItemsById = useMemo(() => {
+		const m = {};
+		allItems.forEach((mi) => {
+			m[mi.id] = mi;
+		});
+		return m;
+	}, [allItems]);
+
 	return (
 		<div className="min-h-screen bg-slate-950 text-slate-100">
 			<AppHeader />
@@ -598,7 +637,7 @@ export default function CulinaryDashboard() {
 						</div>
 					)}
 				</div>
-{/* 
+				{/* 
 				{activeType === "Purchased" && !queryText && (
 					<div className="mb-2 flex flex-wrap items-center gap-2">
 						<button
@@ -736,6 +775,10 @@ export default function CulinaryDashboard() {
 				recipe={recipe}
 				computed={computed}
 				menuItem={selected}
+				// 🔽 new props
+				recipeNameMap={recipeNameMap}
+				menuItemsById={menuItemsById}
+				onOpenByRecipeId={openSpecByRecipeId}
 			/>
 
 			<LabelModal

@@ -1,9 +1,5 @@
 /** @format */
 import React, { useEffect, useState } from "react";
-import RecipesManager from "./RecipesManager";
-import AppHeader from "../../components/layout/AppHeader";
-import MenuManager from "./MenuManager";
-import SalesInsights from "./SalesInsights"; // ⬅️ NEW
 import { db } from "../../firebase";
 import {
 	collection,
@@ -18,29 +14,6 @@ import {
 	writeBatch,
 	serverTimestamp,
 } from "firebase/firestore";
-
-/* ------------ Tiny in-file Toast hook ------------ */
-function useToast() {
-	const [msg, setMsg] = useState(null); // {type:'ok'|'err', text}
-	const show = (type, text, ms = 2200) => {
-		setMsg({ type, text });
-		window.clearTimeout(useToast._t);
-		useToast._t = window.setTimeout(() => setMsg(null), ms);
-	};
-	const Toast = () =>
-		msg ? (
-			<div
-				className={`fixed top-3 right-3 px-3 py-2 rounded-lg text-xs z-50 shadow ${
-					msg.type === "ok"
-						? "bg-emerald-500 text-slate-900"
-						: "bg-rose-500 text-white"
-				}`}
-			>
-				{msg.text}
-			</div>
-		) : null;
-	return { show, Toast };
-}
 
 /* ------------ UI Bits ------------ */
 function Card({ title, children, className = "" }) {
@@ -71,79 +44,8 @@ const ALLERGENS = [
 	"Mustard",
 ];
 
-const TABS = [
-	{ id: "INGREDIENTS", label: "Ingredients & Costs" },
-	{ id: "RECIPES", label: "Recipes / Specs" },
-	{ id: "MENU", label: "Menu & Pricing" },
-	{ id: "SALES", label: "Sales & Insights" },
-];
-
 /* ================================================== */
-export default function CorpDashboard() {
-	const { show, Toast } = useToast();
-	const [activeTab, setActiveTab] = useState("INGREDIENTS");
-
-	return (
-		<div className="min-h-screen bg-slate-950 text-slate-100">
-			<AppHeader />
-			<div className="max-w-[1200px] mx-auto p-5 space-y-4">
-				<div className="flex items-center justify-between gap-3">
-					<h1 className="text-xl font-semibold">
-						Corporate Dashboard
-					</h1>
-				</div>
-
-				{/* Tab pills */}
-				<div className="flex flex-wrap gap-2 text-[11px]">
-					{TABS.map((t) => {
-						const active = activeTab === t.id;
-						return (
-							<button
-								key={t.id}
-								onClick={() => setActiveTab(t.id)}
-								className={`px-3 py-1.5 rounded-full border transition ${
-									active
-										? "bg-emerald-400 text-slate-900 border-emerald-400 shadow-sm"
-										: "bg-slate-900/60 border-slate-700 text-slate-300 hover:border-emerald-400 hover:text-emerald-300"
-								}`}
-							>
-								{t.label}
-							</button>
-						);
-					})}
-				</div>
-
-				{/* Tab content */}
-				{activeTab === "INGREDIENTS" && (
-					<IngredientsManager toast={{ show }} />
-				)}
-
-				{activeTab === "RECIPES" && (
-					<div className="space-y-3">
-						<RecipesManager />
-					</div>
-				)}
-
-				{activeTab === "MENU" && (
-					<div className="space-y-3">
-						<MenuManager />
-					</div>
-				)}
-
-				{activeTab === "SALES" && (
-					<div className="space-y-3">
-						<SalesInsights />
-					</div>
-				)}
-			</div>
-			<Toast />
-		</div>
-	);
-}
-
-/* ================================================== */
-/* INGREDIENTS MANAGER stays as-is, just moved below  */
-function IngredientsManager({ toast }) {
+export default function IngredientsManager({ toast }) {
 	const [items, setItems] = useState([]);
 	const [q, setQ] = useState("");
 	const [sortKey, setSortKey] = useState("name"); // name|unit
@@ -200,7 +102,7 @@ function IngredientsManager({ toast }) {
 		if (!form.id) {
 			const dupe = items.find((i) => norm(i.name) === norm(form.name));
 			if (dupe) {
-				toast.show("err", "Ingredient already exists");
+				toast?.show?.("err", "Ingredient already exists");
 				return;
 			}
 		}
@@ -217,20 +119,20 @@ function IngredientsManager({ toast }) {
 					},
 					{ merge: true }
 				);
-				toast.show("ok", "Ingredient updated");
+				toast?.show?.("ok", "Ingredient updated");
 			} else {
 				await addDoc(collection(db, "ingredients"), {
 					name: form.name,
 					unit: form.unit,
 					allergens: form.allergens,
 				});
-				toast.show("ok", "Ingredient added");
+				toast?.show?.("ok", "Ingredient added");
 			}
 			setForm({ id: undefined, name: "", unit: "g", allergens: [] });
 			await loadIngredients();
 		} catch (e2) {
 			console.error(e2);
-			toast.show("err", "Save failed");
+			toast?.show?.("err", "Save failed");
 		} finally {
 			setSaving(false);
 		}
@@ -241,12 +143,12 @@ function IngredientsManager({ toast }) {
 		if (!confirm(`Delete "${it.name}"?`)) return;
 		try {
 			await deleteDoc(doc(db, "ingredients", it.id));
-			toast.show("ok", "Deleted");
+			toast?.show?.("ok", "Deleted");
 			if (expanded === it.id) setExpanded(null);
 			await loadIngredients();
 		} catch (e) {
 			console.error(e);
-			toast.show("err", "Delete failed");
+			toast?.show?.("err", "Delete failed");
 		}
 	};
 
@@ -307,10 +209,10 @@ function IngredientsManager({ toast }) {
 				...p,
 				[ingredientId]: sortPrices(prices),
 			}));
-			toast.show("ok", "Price added");
+			toast?.show?.("ok", "Price added");
 		} catch (e2) {
 			console.error(e2);
-			toast.show("err", "Could not add price");
+			toast?.show?.("err", "Could not add price");
 		} finally {
 			setAddingPrice(false);
 		}

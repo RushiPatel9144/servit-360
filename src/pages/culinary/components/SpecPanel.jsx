@@ -21,6 +21,10 @@ export default function SpecPanel({
 	recipe,
 	computed,
 	menuItem,
+	// 🔽 new props
+	recipeNameMap = {},
+	menuItemsById = {},
+	onOpenByRecipeId,
 }) {
 	const [mult, setMult] = useState(1); // 1..8
 	const [customYield, setCustomYield] = useState(""); // optional numeric
@@ -84,6 +88,11 @@ export default function SpecPanel({
 		"https://dummyimage.com/800x600/efefef/111111.jpg&text=No+Photo";
 
 	const [photoOpen, setPhotoOpen] = useState(false);
+
+	const getRecipeName = (id) => recipeNameMap?.[id] || id || "Component";
+	const usedInMenuItems = (recipe?.usedInMenuItems || [])
+		.map((mid) => menuItemsById[mid])
+		.filter(Boolean);
 
 	useEffect(() => {
 		if (!open) {
@@ -299,6 +308,53 @@ export default function SpecPanel({
 								</div>
 							</>
 						) : null}
+
+						{/* Components: other prepped recipes this spec uses (for mains) */}
+						{Array.isArray(recipe?.components) &&
+							recipe.components.length > 0 && (
+								<>
+									<h3 className="text-[12px] font-semibold mt-3 mb-2">
+										Components
+									</h3>
+									<div className="flex flex-wrap gap-1">
+										{recipe.components.map((rid) => (
+											<button
+												key={rid}
+												onClick={() =>
+													onOpenByRecipeId &&
+													onOpenByRecipeId(rid)
+												}
+												className="px-2 py-1 rounded-full border border-slate-700 text-[10px] hover:border-emerald-400 hover:text-emerald-300"
+											>
+												{getRecipeName(rid)}
+											</button>
+										))}
+									</div>
+								</>
+							)}
+
+						{/* Used in: which dishes use this prep recipe */}
+						{usedInMenuItems.length > 0 && (
+							<>
+								<h3 className="text-[12px] font-semibold mt-3 mb-2">
+									Used In
+								</h3>
+								<div className="flex flex-wrap gap-1">
+									{usedInMenuItems.map((mi) => (
+										<button
+											key={mi.id}
+											onClick={() =>
+												onOpenByRecipeId &&
+												onOpenByRecipeId(mi.recipeId)
+											}
+											className="px-2 py-1 rounded-full border border-slate-700 text-[10px] hover:border-emerald-400 hover:text-emerald-300"
+										>
+											{mi.name} · {mi.type || "Line"}
+										</button>
+									))}
+								</div>
+							</>
+						)}
 					</div>
 				</div>
 			</div>
