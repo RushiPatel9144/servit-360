@@ -90,3 +90,131 @@ This project models the actual workflows used by large hospitality groups to mai
 -   Firestore (NoSQL)
 
 ### **Firestore Structure**
+
+```
+ingredients/
+  {ingredientId}/prices/
+recipes/
+menuItems/
+  {menuItemId}/prices/
+serverSales/
+servers/
+users/
+```
+
+-   All price updates use Firestore `writeBatch` for atomic updates
+-   Costing engine pulls latest price per ingredient
+
+---
+
+## 🔐 Roles & Dashboards
+
+| Role          | Access                                     |
+| ------------- | ------------------------------------------ |
+| **Corporate** | Ingredients, Recipes, Menu, Sales Insights |
+| **Culinary**  | Recipes + Menu Manager                     |
+| **Server**    | POS Dashboard                              |
+
+Routing automatically sends `/dashboard` → correct page based on stored role.
+
+---
+
+## 🛠 Development Setup
+
+### **1. Clone**
+
+```bash
+git clone https://github.com/your-repo/culinary-ops-platform.git
+cd culinary-ops-platform
+```
+
+### **2. Install**
+
+```bash
+npm install
+```
+
+### **3. Add Firebase Environment Variables**
+
+Create `.env`:
+
+```
+VITE_FIREBASE_API_KEY=xxxx
+VITE_FIREBASE_AUTH_DOMAIN=xxxx
+VITE_FIREBASE_PROJECT_ID=xxxx
+VITE_FIREBASE_STORAGE_BUCKET=xxxx
+VITE_FIREBASE_MESSAGING_SENDER_ID=xxxx
+VITE_FIREBASE_APP_ID=xxxx
+```
+
+### **4. Run**
+
+```bash
+npm run dev
+```
+
+---
+
+## 🧪 Seed Utilities
+
+Development seeders are available for:
+
+-   Ingredients
+-   Recipes
+-   Menu items
+-   Server accounts
+-   Example sales entries
+
+Routes:
+
+```
+/dev-seed
+/dev-seed2
+/dev-seed-servers
+/dev-menu-seed
+```
+
+_(These should be disabled in production builds.)_
+
+---
+
+## 📊 Simplified Firestore Rules
+
+```js
+match /{document=**} {
+  allow read, write: if request.auth != null;
+}
+```
+
+Production usage should adopt stricter role-based rules.
+
+---
+
+## 🖥 Deployment (Vercel)
+
+-   Compatible with Vercel out of the box
+-   SPA routing works via fallback to `index.html`
+-   Ensure `.env` variables are populated in Vercel dashboard
+-   Fixes applied for Vite + Firebase auth in production
+
+---
+
+## 📘 Future Enhancements
+
+-   Inventory & stock depletion
+-   Prep list generator
+-   Waste / spoilage tracking
+-   Category-level mix reporting
+-   Labour-to-sales integration
+-   Real-time sales feeds
+-   Multi-brand deep reporting
+
+---
+
+## 👤 Author
+
+**Rushi Patel**  
+Full-Stack Developer & Culinary Systems Enthusiast  
+_(Internal project)_
+
+---
