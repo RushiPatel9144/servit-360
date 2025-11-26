@@ -602,7 +602,7 @@ export default function ServerDashboard() {
                         <div>
                           Tip:{" "}
                           <span className="font-semibold">
-                            ${tipAmt.toFixed(2)}
+                             ${tipAmt.toFixed(2)}
                           </span>
                         </div>
                         <div>
